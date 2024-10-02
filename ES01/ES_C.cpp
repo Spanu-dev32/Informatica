@@ -149,7 +149,7 @@ int studenti10(Studente t[]) {
 
 void randomVoti(Studente t[]) {
 	for(int i=0;i<NUM_STUD; i++) {
-		for(int j=0; j<NUM_STUD; j++) {
+		for(int j=0; j<NUM_VOTI; j++) {
 			t[i].voti[j]=rand()%10+1;
 		}
 	}
