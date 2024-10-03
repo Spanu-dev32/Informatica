@@ -50,7 +50,7 @@ int main () {
 	caricaTab(studente);
 	//Formatto il cognome
 	formattaCogn(studente);
-	stampaTab(studente)
+	stampaTab(studente);
 	printf("\n");
 	// Ricerca Cognome
 	printf("Inserisci il cognome dell'alunno che vuoi cercare:\n");
@@ -69,7 +69,6 @@ int main () {
 	// Calcolo studente con almeno un voto 10
 	voto=studenti10(studente);
 	printf("Gli studenti che hanno un voto pari a 10 sono: %d\n",voto);
-	*/
 }
 
 
@@ -93,15 +92,14 @@ void caricaTab(Studente t[]) {
 
 // Stampa la tabella allineando correttamente i dati.
 void stampaTab(Studente t[]) {
-	printf("Cognome:\t");
-	printf("Data di nascita:\t");
-	printf("Voti:\t\n");
-	printf("----------------------------------\n");
+	printf("%-20s %-10s %+19s\n", "Cognome", "Data N.", "Voti");
+	printf("--------------------------------------------\n");
+	printf("\n");
 	for(int i=0; i<NUM_STUD; i++) {
-    printf("%-20s\t",t[i].cognome); // Stampo il cognome
-    printf("%d/%d/%d\t",t[i].data_nascita.giorno, t[i].data_nascita.mese, t[i].data_nascita.anno); // Stampo la data di nascita
+	printf("%-20s %02d/%02d/%04d\t",t[i].cognome,t[i].data_nascita.giorno,t[i].data_nascita.mese,t[i].data_nascita.anno);
+	printf("\t");
     for(int j=0;j<NUM_VOTI; j++) { // Ciclo for per i voti
-        printf("%d ",t[i].voti[j]);
+        printf("%3d ",t[i].voti[j]);
     }
     printf("\n");
     
@@ -165,7 +163,7 @@ void formattaCogn(Studente t[]) {
 	int k=0;
 	for(int i=0; i<NUM_STUD; i++) {
 		if(t[i].cognome[0] >= 'a' && t[i].cognome[0]<='z') {
-				t[i].cognome[k]-=32;
+				t[i].cognome[0]-=32;
 			}
 		k=0;
 		while(t[i].cognome[k]!='\0') {
