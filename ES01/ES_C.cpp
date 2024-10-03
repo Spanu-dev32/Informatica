@@ -5,6 +5,7 @@
 	int ricercCog(Studente t[], char cog[]): Cerca uno studente per cognome, restituendo l'indice (o -1 se non trovato).
 	int stampaMedia(Studente t[]): Stampa la media voti per ogni studente e conta quante medie sono = 6.
 	int studenti10(Studente t[]): Conta gli studenti con almeno un voto pari a 10.
+	void formattaCogn(Studente t[]): Scrivi in maiuscolo la prima lettera del campo cognome e minuscole tutte le altre per tutti i record della tabella
 */
 
 
@@ -39,6 +40,7 @@ int ricercCog(Studente t[], char []);
 int stampaMedia(Studente t[]);
 int studenti10(Studente t[]);
 void randomVoti(Studente t[]);
+void formattaCogn(Studente t[]);
 
 int main () {
 	srand(time(NULL));
@@ -46,7 +48,9 @@ int main () {
 	int media,voto;
 	Studente studente[NUM_STUD];
 	caricaTab(studente);
-	stampaTab(studente);
+	//Formatto il cognome
+	formattaCogn(studente);
+	stampaTab(studente)
 	printf("\n");
 	// Ricerca Cognome
 	printf("Inserisci il cognome dell'alunno che vuoi cercare:\n");
@@ -65,6 +69,7 @@ int main () {
 	// Calcolo studente con almeno un voto 10
 	voto=studenti10(studente);
 	printf("Gli studenti che hanno un voto pari a 10 sono: %d\n",voto);
+	*/
 }
 
 
@@ -133,7 +138,7 @@ int stampaMedia(Studente t[]) {
 	}
 	return contatore;
 }
-
+// Conta gli studenti con almeno un voto pari a 10.
 int studenti10(Studente t[]) {
 	int contatore=0;
 	for(int i=0; i<NUM_STUD; i++) {
@@ -146,11 +151,28 @@ int studenti10(Studente t[]) {
 	}
 	return contatore;
 }
-
+// Genero i voti random che partono da 1 a 10
 void randomVoti(Studente t[]) {
 	for(int i=0;i<NUM_STUD; i++) {
 		for(int j=0; j<NUM_VOTI; j++) {
 			t[i].voti[j]=rand()%10+1;
+		}
+	}
+}
+
+// Scrivi in maiuscolo la prima lettera del campo cognome e minuscole tutte le altre per tutti i record della tabella
+void formattaCogn(Studente t[]) { 
+	int k=0;
+	for(int i=0; i<NUM_STUD; i++) {
+		if(t[i].cognome[0] >= 'a' && t[i].cognome[0]<='z') {
+				t[i].cognome[k]-=32;
+			}
+		k=0;
+		while(t[i].cognome[k]!='\0') {
+			k++;
+			if(t[i].cognome[k] >= 'A' && t[i].cognome[k]<='Z') {
+				t[i].cognome[k]+=32;
+			}
 		}
 	}
 }
