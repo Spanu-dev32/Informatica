@@ -31,7 +31,7 @@ void diffBetweenTimePeriod(tempo start, tempo end, tempo* diff) {
 	// Calcolo secondi
     if (start.seconds < end.seconds) {
         start.minutes--;               // Decremento i minuti
-        sstart.seconds = start.seconds+60;            // Aggiungo 60 secondi
+        start.seconds = start.seconds+60;            // Aggiungo 60 secondi
     }
     diff->seconds = start.seconds - end.seconds;
 
