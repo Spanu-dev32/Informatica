@@ -20,7 +20,7 @@ int main()
     if(c!=' ') {
         caratteri++;
     }
-    if(c==' ' || c==9) {
+    if(c != ' ' && c != '\t' && c != '\n') {
         parole++;
     }
     if(c =='\n') {
