@@ -10,17 +10,21 @@ int main()
 {
   char nomeFileIN[] = "in.txt";
   char c;
-  FILE *puntIn = fopen(nomeFileIN, "r");
-  FILE *puntOut = fopen("out.txt", "w");
+  FILE *puntIn = fopen(nomeFileIN, "r");  // Dichiarazione del file di input
+  FILE *puntOut = fopen("out.txt", "w"); // Dichiarazione del file di output
+  
+  // Condizione se il file non si riesce ad aprire
   if(puntIn == NULL || puntOut == NULL) {
     perror("Il file non si puo aprire: ");
   }
   while (!feof(puntIn))
   {
-    c = fgetc(puntIn);
-    fputc(c, puntOut);
+    c = fgetc(puntIn);  // Ottengo il primo carattere 
+    fputc(c, puntOut); // Lo inserisco nel file di output
   }
-  fclose(puntIn);
+
+  // Chiudo i file di input e output
+  fclose(puntIn); 
   fclose(puntOut);
 
 }
