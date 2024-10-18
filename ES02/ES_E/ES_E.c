@@ -5,6 +5,9 @@ Scrivere le funzioni cesareCrypt e cesareDecrypt che criptano o decriptano un fi
 #include "stdio.h"
 #include "errno.h"
 
+
+void cesareCrypt(FILE *, FILE *, int);
+void cesareDecrypt(FILE *, FILE*, int);
 int main()
 {
     char nomeFileIN[] = "key.txt";
@@ -12,13 +15,22 @@ int main()
     int chiave = 3;
     FILE *puntIn = fopen(nomeFileIN, "r"); // Dichiarazione del file di input
     FILE *puntOut = fopen("out.txt", "w"); // Dichiarazione del file di output
+    FILE *puntDecrypt = fopen("decrypt.txt", "w");
 
     // Condizione se il file non si riesce ad aprire
     if (puntIn == NULL)
     {
         perror("Il file non si puo aprire: ");
     }
-    while (!feof(puntIn))
+    // cesareCrypt(puntIn,puntOut,chiave);
+     cesareDecrypt(puntIn,puntDecrypt,chiave);
+}
+
+
+
+void cesareCrypt(FILE *puntIn,FILE *puntOut,int chiave) {
+    char c, cript=0;
+     while (!feof(puntIn))
     {
         c = fgetc(puntIn); // Ottengo il primo carattere
         if (c != ' ')
@@ -46,6 +58,36 @@ int main()
         else
             fputc(' ', puntOut);
     }
-    // Chiudo i file di input e output
-    fclose(puntIn);
+}
+
+void cesareDecrypt(FILE *puntIn,FILE *puntDecrypt,int chiave ) {
+      char c, decript=0;
+     while (!feof(puntIn))
+    {
+        c = fgetc(puntIn); // Ottengo il primo carattere
+        if (c != ' ')
+        {
+            if (c >= 'A' && c <= 'Z')
+            {
+                decript = c - chiave;
+                if (decript < 'A')
+                {
+                    decript = 'Z' - ('A' - decript - 1);
+                }
+                fputc(decript, puntDecrypt);
+            }
+            if (c >= 'a' && c <= 'z')
+            {
+
+                decript = c - chiave;
+                if (decript < 'a')
+                {
+                   decript = 'z' - ('a' - decript - 1);
+                }
+                fputc(decript, puntDecrypt);
+            }
+        }
+        else
+            fputc(' ', puntDecrypt);
+    }
 }
