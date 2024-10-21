@@ -11,28 +11,30 @@ int main()
 {
     char nomeFileIN[] = "numeri.txt";
     int c;
+    // Dichiarazione di file 
     FILE *puntIn = fopen(nomeFileIN, "r");
     FILE *puntPari = fopen("pari.txt", "w");
     FILE *puntDispari = fopen("dispari.txt", "w");
     if (puntIn == NULL)
     {
-        perror("Il file non si puo aprire: ");
+        perror("Il file non si puo aprire: "); // Stampo l'errore se non riesco ad aprire un file 
     }
     while (!feof(puntIn))
     {
         c = fgetc(puntIn);
-        if (c != ' ' && c >= '0' && c <= '9')
+        if (c != ' ' && c >= '0' && c <= '9') // Verifico che il carattere c non sia uno spazio e che dev'essere compreso tra 0 e 9
         {
             int numero;
-            numero = c - '0';
+            numero = c - '0'; // Converto il numero da ascii a valore numerico
             if (numero % 2 == 0)
             {
-                fprintf(puntPari, "%d ", numero);
+                fprintf(puntPari, "%d ", numero); // Se pari
             }
             else
-                fprintf(puntDispari, "%d ", numero);
+                fprintf(puntDispari, "%d ", numero); // Se dispari
         }
     }
+    // Chiudo i file 
     fclose(puntIn);
     fclose(puntPari);
     fclose(puntDispari);
