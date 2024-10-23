@@ -14,20 +14,18 @@ int main()
   if(puntIn == NULL) {
     perror("Il file non si puo aprire: "); // Se il file non si può aprire
   }
-  while (!feof(puntIn))
+  while ((c = fgetc(puntIn)) != EOF) 
   {
-    c = fgetc(puntIn); // Ottengo il carattere
-
     if(c != ' ' && c != '\t' && c != '\n') { // Se non è uguale a uno spazio, tabulazione o a capo aumento i caratteri
         caratteri++;
     }
     if(c==' ' || c=='\n') { // Se è uguale a uno spazio o andare a capo aumento le paorle 
         parole++;
         }
-    }
     if(c =='\n') { // Se è uguale all'andare a capo aumento le righe 
         righe++;
     }
+  }
     fclose(puntIn);
-    printf("Ci sono: %d caratteri, %d parole, %d frasi",caratteri,parole,righe);
+    printf("Ci sono: %d caratteri, %d parole, %d frasi\n",caratteri,parole,righe);
 }

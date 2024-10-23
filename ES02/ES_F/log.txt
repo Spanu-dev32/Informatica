@@ -1,0 +1,12 @@
+[2024-10-23 21:43:16] Messaggio di log 1
+[2024-10-23 21:43:16] Messaggio di log 2
+[2024-10-23 21:44:03] Primo messaggio del log!
+[2024-10-23 21:44:03] Secondo messaggio del log per vedere se il programma funziona!
+[2024-10-23 22:43:57] Primo messaggio del log!
+[2024-10-23 22:43:57] Secondo messaggio del log per vedere se il programma funziona!
+[2024-10-23 22:44:12] Primo messaggio del log!
+[2024-10-23 22:44:12] Secondo messaggio del log per vedere se il programma funziona!
+[2024-10-23 22:45:00] Primo messaggio del log!
+[2024-10-23 22:45:00] Secondo messaggio del log per vedere se il programma funziona!
+[2024-10-23 22:45:46] Prima prova del programma
+[2024-10-23 22:45:46] Altra prova del programma parte 2

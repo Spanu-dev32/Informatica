@@ -1,2 +1,1 @@
-Questa è una    frase assurdamente bella
-mentre questa è la seconda frase
+Con questa frase capiremo se questo programma funziona oppure no!
