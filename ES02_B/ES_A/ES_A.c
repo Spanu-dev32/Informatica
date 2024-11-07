@@ -77,8 +77,6 @@ void randomVoti(Persona p[]) {
 // Scrive N record nel file
 void scriviFile(FILE *puntOut) {
     Persona p;
-    char risposta;
-    int i = 0;  
 
     // Verifica se il file è stato aperto correttamente in modalità binaria
     if (puntOut == NULL) {
@@ -86,15 +84,15 @@ void scriviFile(FILE *puntOut) {
         return;
     }
 
-    do {
+    for(int i=0; i<N; i++) {
         // Avvaloro record 
         printf("Inserisci il cognome per la persona: ");
-        scanf("%s", p.cognome);
+        scanf("%s", p[i].cognome);
         printf("Inserisci il nome per la persona: ");
-        scanf("%s", p.nome);
+        scanf("%s", p[i].nome);
 
         randomVoti(&p);
-
+}
         // Scrivi il record nel file
         size_t scritto = fwrite(&p, sizeof(Persona), 1, puntOut);
         if (scritto != 1) {
@@ -102,18 +100,7 @@ void scriviFile(FILE *puntOut) {
             break;  // Esci se ci sono errori di scrittura
         }
 
-        // Chiedi se l'utente vuole inserire un altro record
-        printf("Vuoi inserire un altro record? (s/n): ");
-        scanf(" %c", &risposta);  // Spazio prima di %c per evitare il carattere di nuova riga 
-
-        i++; 
-
-        if (i >= N) {
-            printf("Limite di record raggiunto.\n");
-            break;
-        }
-
-    } while (risposta == 's' || risposta == 'S');
+      
 
     printf("File binario scritto con successo!\n");
 }
