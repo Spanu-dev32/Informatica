@@ -1,42 +1,39 @@
 /* Beretta Alessio
-Scrivere e collaudare (una funzione alla volta) il programma in C che nel main richiama le seguenti funzioni: 
+Scrivere e collaudare (una funzione alla volta) il programma in C che nel main richiama le seguenti funzioni:
 funzione per scrivere un file di N record con N costante posta a 10;
 funzione per leggere e stampare su monitor le informazioni del file di record (si usi il controllo di fine file e non il ciclo for con N perché la funzione sia valida quale che sia il numero di record del file (quindi anche diverso da N)).
 conta quante volte è presente uno studente che ha il cognome uguale alla stringa passata in output; la funzione restituisce un intero
-per ogni studente visualizza il suo cognome, la media dei suoi voti, il suo voto più alto e il suo voto più basso. 
+per ogni studente visualizza il suo cognome, la media dei suoi voti, il suo voto più alto e il suo voto più basso.
 */
 
-
-
-
-
-#include "stdio.h"
-#include "string.h"
-#include "time.h"
-#include "stdlib.h"
-#include "errno.h"
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define N 3
-#define length 50
+#define LENGTH 50
 #define V 5
 
 typedef struct {
-    char cognome[length];
-    char nome[length];
+    char cognome[LENGTH];
+    char nome[LENGTH];
     int voti[V];
+    float media;
 } Persona;
 
-void scriviFile(FILE *);  // Funzione per scrivere il file
-void leggiFile(FILE *); // Funzione per leggere il file
-int stampaMedia(int []); // Funzione per stampare la media dei voti
-void randomVoti(Persona []); // Random per i voti 
-int cercaCognome(FILE *, const char *); // CercaCognome
+void scriviFile(FILE *puntOut); // Funzione per scrivere il file
+void stampaFile(FILE *puntIn); // Funzione per stampare il file
+int cercaCognome(FILE *puntIn, const char *cognome); // Funzione per cercare il cognome 
+void stampaVoti(Persona p); // Funzione per stampare il voto minimo, max 
+void stampaMedia(Persona p); // Funzione per stampare la media 
+void correggiRecord(FILE *); // Corregge il record se il voto della persona è inferiore al 4, mettendolo a 4 
 
 int main() {
     srand(time(NULL));
-    Persona Persone[N];
-     char cognomeRicerca[length];
+    char cognomeRicerca[LENGTH];
     FILE *puntIn = fopen("prova1.dat", "wb");
+    
     if (puntIn == NULL) {
         perror("Il file non si apre!\n");
         return 1;
@@ -48,109 +45,88 @@ int main() {
 
     // Riapro il file per la lettura
     puntIn = fopen("prova1.dat", "rb");
+    
     if (puntIn == NULL) {
         perror("Impossibile riaprire il file!\n");
         return 1;
     }
 
     // Leggi e stampa le informazioni dal file
-    leggiFile(puntIn);
-
-    /// Ricerca cognome
+    stampaFile(puntIn);
+    
+    // Ricerca cognome
     printf("Che cognome vuoi cercare?\n");
-    scanf("%s",cognomeRicerca);
+    scanf("%s", cognomeRicerca);
+    
     int ricerca = cercaCognome(puntIn, cognomeRicerca);
     printf("Lo studente %s appare %d nel file.\n", cognomeRicerca, ricerca);
-
+    // Correggi Record
+    correggiRecord(puntIn);
+    stampaFile(puntIn);
+    
     fclose(puntIn);
 }
 
-// Genera i voti casuali da 1 a 10
-void randomVoti(Persona p[]) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < V; j++) {
-            p[i].voti[j] = rand() % 10 + 1;
-        }
-    }
-}
-
-// Scrive N record nel file
 void scriviFile(FILE *puntOut) {
     Persona p;
-    char risposta;
-    int i = 0;  
 
-    // Verifica se il file è stato aperto correttamente in modalità binaria
-    if (puntOut == NULL) {
-        perror("Errore nell'aprire il file");
-        return;
-    }
-
-    do {
-        // Avvaloro record 
-        printf("Inserisci il cognome per la persona: ");
+    for (int i = 0; i < N; i++) {
+        printf("Inserisci il cognome per la persona %d: ", i + 1);
         scanf("%s", p.cognome);
-        printf("Inserisci il nome per la persona: ");
+        printf("Inserisci il nome per la persona %d: ", i + 1);
         scanf("%s", p.nome);
 
-        randomVoti(&p);
-
-        // Scrivi il record nel file
+        // Genera voti casuali
+        for (int j = 0; j < V; j++) {
+            p.voti[j] = rand() % 10 + 1; // Voti da 1 a 10
+        }
         size_t scritto = fwrite(&p, sizeof(Persona), 1, puntOut);
+        
         if (scritto != 1) {
-            perror("Errore nella scrittura del file");
-            break;  // Esci se ci sono errori di scrittura
+            perror("Errore nella scrittura del file\n");
         }
-
-        // Chiedi se l'utente vuole inserire un altro record
-        printf("Vuoi inserire un altro record? (s/n): ");
-        scanf(" %c", &risposta);  // Spazio prima di %c per evitare il carattere di nuova riga 
-
-        i++; 
-
-        if (i >= N) {
-            printf("Limite di record raggiunto.\n");
-            break;
-        }
-
-    } while (risposta == 's' || risposta == 'S');
-
-    printf("File binario scritto con successo!\n");
+    }
+    
+    printf("File scritto correttamente!\n");
 }
 
-// Legge e stampa i record dal file
-void leggiFile(FILE *puntIn) {
+void stampaFile(FILE *puntIn) {
     Persona p;
-    int n;
-    float media;
-     printf("%-20s %-20s %-25s %-6s\n", "Cognome", "Nome", "Voti", "Media");
-	printf("--------------------------------------------\n");
-    while ((n = fread(&p, sizeof(Persona), 1, puntIn)) > 0) {
-       media = stampaMedia(p.voti);
 
-        printf("%-20s  %-20s",p.cognome, p.nome);
+    printf("%-20s %-20s %-25s %-6s\n", "Cognome", "Nome", "Voti", "Media");
+    printf("--------------------------------------------\n");
+
+    while (fread(&p, sizeof(Persona), 1, puntIn) > 0) {
+        printf("%-20s %-20s ", p.cognome, p.nome);
+        
         for (int j = 0; j < V; j++) {
             printf("%-4d", p.voti[j]);
         }
-        printf("%6.2f\n", media);
+        
+        stampaVoti(p); // Stampa massimo e minimo voti
+        stampaMedia(p); // Stampa media voti
+        printf("\n");
     }
 }
 
-// Calcola la media dei voti
-int stampaMedia(int voti[]) {
+void stampaMedia(Persona p) {
     int somma = 0;
-    for (int j = 0; j < V; j++) {
-        somma += voti[j];
+    
+    for (int i = 0; i < V; i++) {
+        somma += p.voti[i];
     }
-    return somma / V;
+    
+    p.media = (float)somma / V; // 
+    
+    printf("La media è uguale a %.2f\n", p.media); // Stampa la media
 }
 
-// Conta quante volte un cognome appare nel file
 int cercaCognome(FILE *puntIn, const char *cognome) {
     Persona p;
     int conta = 0;
 
-    fseek(puntIn, 0, SEEK_SET);       // Riporto il puntatore all'inizio del file perchè mi trovo alla fine del file 
+    fseek(puntIn, 0, SEEK_SET); // Riporta il puntatore all'inizio del file
+    
     while (fread(&p, sizeof(Persona), 1, puntIn) > 0) {
         if (strcmp(p.cognome, cognome) == 0) {
             conta++;
@@ -158,4 +134,47 @@ int cercaCognome(FILE *puntIn, const char *cognome) {
     }
 
     return conta;
+}
+
+void stampaVoti(Persona p) {
+    int votoMax = p.voti[0];
+    int votoMin = p.voti[0];
+    // Calcolo del voto massimo, minimo e la somma per la media
+    for (int j = 1; j < V; j++) {
+        if (p.voti[j] > votoMax) {
+            votoMax = p.voti[j];
+        }
+        if (p.voti[j] < votoMin) {
+            votoMin = p.voti[j];
+        }
+    }
+    // Stampa dei risultati
+    printf("Voto più alto: %d\n", votoMax);
+    printf("Voto più basso: %d\n", votoMin);
+}
+
+// Correggi i record con voti inferiori a 4
+void correggiRecord(FILE *puntIn)
+{
+    FILE *puntOut = fopen("prova1.dat", "r+b");
+    if (puntOut == NULL)
+    {
+        perror("Impossibile aprire il file per la modifica");
+        return;
+    }
+
+    Persona p;
+    while (fread(&p, sizeof(Persona), 1, puntIn) > 0)
+    {
+        for (int i = 0; i < V; i++)
+        {
+            if (p.voti[i] < 4)
+            {
+                p.voti[i] = 4; // Correggi il voto
+            }
+        }
+        fseek(puntOut, -sizeof(Persona), SEEK_CUR);
+        fwrite(&p, sizeof(Persona), 1, puntOut);
+    }
+    fclose(puntOut);
 }
