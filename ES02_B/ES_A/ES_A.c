@@ -76,7 +76,7 @@ void randomVoti(Persona p[]) {
 
 // Scrive N record nel file
 void scriviFile(FILE *puntOut) {
-    Persona p;
+    Persona p[N];
 
     // Verifica se il file è stato aperto correttamente in modalità binaria
     if (puntOut == NULL) {
