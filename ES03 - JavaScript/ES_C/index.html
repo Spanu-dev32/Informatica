@@ -1,7 +1,7 @@
 <!-- 
     Beretta Alessio
-    Creare uno script che interagisce con l'utente per ottenere il nome, il cognome e l'età e quindi creare un oggetto persona con queste informazioni, 
-    poi stampare su console l’oggetto e il suo contenuto.
+    Dichiara e assegna un valore alla variabile voto. 
+    Utilizzando l'operatore ternario assegnare "Promosso" se il voto è maggiore o uguale a 6 e "Bocciato" in caso contrario alla variabile esito.
 -->
 
 <!DOCTYPE html>
@@ -10,12 +10,9 @@
 </head>
 <body>
     <script>
-    let persona = {
-        nome: prompt("Inserisci il nome della persona:"),
-        cognome: prompt("Inserisci il cognome della persona:"),
-        eta: prompt("Inserisci l'eta' della persona:"),
-    }
-    console.log(persona);
+        let voto=prompt("Inserisci il voto")
+        voto >=6?voto="Promosso!":voto="Bocciato!"
+        console.log(voto);
     </script>
 </body>
 </html>
