@@ -10,16 +10,17 @@
 </head>
 <body>
     <script>
-        let coefficente =prompt("Inserici coefficente angolare della prima retta:");
-        let intercetta = prompt("Inserisci l'intercetta della prima retta");
+        let coefficente =prompt("Inserici coefficente angolare della prima retta:");    // Chiedo coefficente
+        let intercetta = prompt("Inserisci l'intercetta della prima retta");    // Chiedo intercetta
         let x1 = -1;
         let x2 = 10; 
 
-        let m1 = coefficente * x1;
-        let m2= coefficente * x2;
+        let m1 = coefficente * x1; // Formula per calcolare coefficente
+        let m2= coefficente * x2; // Formula per calcolare coefficente secondo punto
 
-        let y1 = m1 * 1 + intercetta * 1;
+        let y1 = m1 * 1 + intercetta * 1; // Il * 1 serve per non avere problemi
         let y2 = m2 * 1 + intercetta * 1;
+        // Stampo i punti delle 2 rette
         console.log("Le coordinate della prima retta sono", m1 , y1);
         console.log("Le coordinate della seconda retta sono",m2 , y2);
     </script>

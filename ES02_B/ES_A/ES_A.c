@@ -23,59 +23,42 @@ typedef struct
     float media;
 } Persona;
 
-void scriviFile(FILE *puntOut);                      // Funzione per scrivere il file
-void stampaFile(FILE *puntIn);                       // Funzione per stampare il file
-int cercaCognome(FILE *puntIn, const char *cognome); // Funzione per cercare il cognome
+void scriviFile();                                   // Funzione per scrivere il file
+void stampaFile();                                   // Funzione per stampare il file
+int cercaCognome(const char *cognome);               // Funzione per cercare il cognome
 void stampaVoti(Persona p);                          // Funzione per stampare il voto minimo, max
 void stampaMedia(Persona p);                         // Funzione per stampare la media
-void correggiRecord(FILE *);                         // Corregge il record se il voto della persona è inferiore al 4, mettendolo a 4
-void contaRecord(FILE *);                            // Funzione per contare i record in un file
+void correggiRecord();                               // Corregge il record se il voto della persona è inferiore al 4, mettendolo a 4
+void contaRecord();                                  // Funzione per contare i record in un file
 
 int main()
 {
     srand(time(NULL));
     char cognomeRicerca[LENGTH];
-    FILE *puntIn = fopen("prova1.dat", "wb");
-
-    if (puntIn == NULL)
-    {
-        perror("Il file non si apre!\n");
-        return 1;
-    }
-
+    FILE *puntIn;
     // Scrittura dei record nel file
-    scriviFile(puntIn);
-    fclose(puntIn);
-
-    // Riapro il file per la lettura
-    puntIn = fopen("prova1.dat", "rb");
-
-    if (puntIn == NULL)
-    {
-        perror("Impossibile riaprire il file!\n");
-        return 1;
-    }
+    scriviFile();
 
     // Leggi e stampa le informazioni dal file
-    stampaFile(puntIn);
+    stampaFile();
 
     // Ricerca cognome
     printf("Che cognome vuoi cercare?\n");
     scanf("%s", cognomeRicerca);
 
-    int ricerca = cercaCognome(puntIn, cognomeRicerca);
+    int ricerca = cercaCognome(cognomeRicerca);
     printf("Lo studente %s appare %d nel file.\n", cognomeRicerca, ricerca);
     // Correggi Record
-    correggiRecord(puntIn);
-    stampaFile(puntIn);
+    correggiRecord();
+    stampaFile();
     // Conta record
     printf("\n");
-    contaRecord(puntIn);
-    fclose(puntIn);
+    contaRecord();
 }
 
-void scriviFile(FILE *puntOut)
+void scriviFile()
 {
+    FILE *puntOut = fopen("prova1.dat", "wb");
     Persona p;
 
     for (int i = 0; i < N; i++)
@@ -99,10 +82,12 @@ void scriviFile(FILE *puntOut)
     }
 
     printf("File scritto correttamente!\n");
+    fclose(puntOut);
 }
 
-void stampaFile(FILE *puntIn)
+void stampaFile()
 {
+    FILE *puntIn = fopen("prova1.dat", "rb");
     Persona p;
 
     printf("%-20s %-20s %-25s\n", "Cognome", "Nome", "Voti");
@@ -121,6 +106,7 @@ void stampaFile(FILE *puntIn)
         stampaMedia(p); // Stampa media voti
         printf("\n");
     }
+    fclose(puntIn);
 }
 
 void stampaMedia(Persona p)
@@ -137,8 +123,9 @@ void stampaMedia(Persona p)
     printf("La media è uguale a %.2f\n", p.media); // Stampa la media
 }
 
-int cercaCognome(FILE *puntIn, const char *cognome)
+int cercaCognome(const char *cognome)
 {
+    FILE *puntIn = fopen("prova1.dat","rb");
     Persona p;
     int conta = 0;
 
@@ -151,7 +138,7 @@ int cercaCognome(FILE *puntIn, const char *cognome)
             conta++;
         }
     }
-
+     fclose(puntIn);
     return conta;
 }
 
@@ -178,8 +165,9 @@ void stampaVoti(Persona p)
 }
 
 // Correggi i record con voti inferiori a 4
-void correggiRecord(FILE *puntIn)
+void correggiRecord()
 {
+    FILE *puntIn = fopen("prova1.dat","rb+");
     Persona p;
     int flag = 0;
     while (fread(&p, sizeof(Persona), 1, puntIn) > 0)
@@ -199,13 +187,16 @@ void correggiRecord(FILE *puntIn)
             fwrite(&p, sizeof(Persona), 1, puntIn);
         }
     }
+    fclose(puntIn);
 }
 
-void contaRecord(FILE *puntIn)
+void contaRecord()
 {
+    FILE *puntIn = fopen("prova1.dat", "rb");
     long posizione;
     fseek(puntIn, 0, SEEK_END);
     posizione = ftell(puntIn);
     long numero = posizione / sizeof(Persona);
     printf("Il numero dei record e' pari a: %lu\n", numero);
+    fclose(puntIn);
 }
