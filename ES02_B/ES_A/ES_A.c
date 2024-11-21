@@ -23,13 +23,13 @@ typedef struct
     float media;
 } Persona;
 
-void scriviFile();                                   // Funzione per scrivere il file
-void stampaFile();                                   // Funzione per stampare il file
-int cercaCognome(const char *cognome);               // Funzione per cercare il cognome
+void scriviFile(FILE *);                                   // Funzione per scrivere il file
+void stampaFile(FILE * );                                   // Funzione per stampare il file
+int cercaCognome(FILE *,const char *cognome);               // Funzione per cercare il cognome
 void stampaVoti(Persona p);                          // Funzione per stampare il voto minimo, max
 void stampaMedia(Persona p);                         // Funzione per stampare la media
-void correggiRecord();                               // Corregge il record se il voto della persona è inferiore al 4, mettendolo a 4
-void contaRecord();                                  // Funzione per contare i record in un file
+void correggiRecord(FILE *);                               // Corregge il record se il voto della persona è inferiore al 4, mettendolo a 4
+void contaRecord(FILE *);                                  // Funzione per contare i record in un file
 
 int main()
 {
@@ -37,26 +37,26 @@ int main()
     char cognomeRicerca[LENGTH];
     FILE *puntIn;
     // Scrittura dei record nel file
-    scriviFile();
+    scriviFile(puntIn);
 
     // Leggi e stampa le informazioni dal file
-    stampaFile();
+    stampaFile(puntIn);
 
     // Ricerca cognome
     printf("Che cognome vuoi cercare?\n");
     scanf("%s", cognomeRicerca);
 
-    int ricerca = cercaCognome(cognomeRicerca);
+    int ricerca = cercaCognome(puntIn, cognomeRicerca);
     printf("Lo studente %s appare %d nel file.\n", cognomeRicerca, ricerca);
     // Correggi Record
-    correggiRecord();
-    stampaFile();
+    correggiRecord(puntIn);
+    stampaFile(puntIn);
     // Conta record
     printf("\n");
-    contaRecord();
+    contaRecord(puntIn);
 }
 
-void scriviFile()
+void scriviFile(FILE* puntIn)
 {
     FILE *puntOut = fopen("prova1.dat", "wb");
     Persona p;
@@ -85,7 +85,7 @@ void scriviFile()
     fclose(puntOut);
 }
 
-void stampaFile()
+void stampaFile(FILE* puntIn)
 {
     FILE *puntIn = fopen("prova1.dat", "rb");
     Persona p;
@@ -123,7 +123,7 @@ void stampaMedia(Persona p)
     printf("La media è uguale a %.2f\n", p.media); // Stampa la media
 }
 
-int cercaCognome(const char *cognome)
+int cercaCognome(FILE *puntIn, const char *cognome)
 {
     FILE *puntIn = fopen("prova1.dat","rb");
     Persona p;
@@ -165,7 +165,7 @@ void stampaVoti(Persona p)
 }
 
 // Correggi i record con voti inferiori a 4
-void correggiRecord()
+void correggiRecord(FILE *puntIn)
 {
     FILE *puntIn = fopen("prova1.dat","rb+");
     Persona p;
@@ -190,7 +190,7 @@ void correggiRecord()
     fclose(puntIn);
 }
 
-void contaRecord()
+void contaRecord(FILE *puntIn)
 {
     FILE *puntIn = fopen("prova1.dat", "rb");
     long posizione;
