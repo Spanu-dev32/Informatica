@@ -87,7 +87,7 @@ void scriviFile(FILE* puntIn)
 
 void stampaFile(FILE* puntIn)
 {
-    FILE *puntIn = fopen("prova1.dat", "rb");
+    puntIn = fopen("prova1.dat", "rb");
     Persona p;
 
     printf("%-20s %-20s %-25s\n", "Cognome", "Nome", "Voti");
@@ -125,7 +125,7 @@ void stampaMedia(Persona p)
 
 int cercaCognome(FILE *puntIn, const char *cognome)
 {
-    FILE *puntIn = fopen("prova1.dat","rb");
+    puntIn = fopen("prova1.dat","rb");
     Persona p;
     int conta = 0;
 
@@ -167,7 +167,7 @@ void stampaVoti(Persona p)
 // Correggi i record con voti inferiori a 4
 void correggiRecord(FILE *puntIn)
 {
-    FILE *puntIn = fopen("prova1.dat","rb+");
+    puntIn = fopen("prova1.dat","rb+");
     Persona p;
     int flag = 0;
     while (fread(&p, sizeof(Persona), 1, puntIn) > 0)
@@ -192,7 +192,7 @@ void correggiRecord(FILE *puntIn)
 
 void contaRecord(FILE *puntIn)
 {
-    FILE *puntIn = fopen("prova1.dat", "rb");
+    puntIn = fopen("prova1.dat", "rb");
     long posizione;
     fseek(puntIn, 0, SEEK_END);
     posizione = ftell(puntIn);
